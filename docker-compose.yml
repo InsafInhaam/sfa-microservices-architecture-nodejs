@@ -1,0 +1,37 @@
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - listing-service
+      - order-service
+
+  user-service:
+    build: ./services/user-service
+    ports:
+      - "4001:4000"
+    environment:
+      - DATABASE_URL=mongodb://mongodb:27017/service_marketplace
+
+  listing-service:
+    build: ./services/listing-service
+    ports:
+      - "4002:4000"
+    environment:
+      - DATABASE_URL=mongodb://mongodb:27017/service_marketplace
+
+  order-service:
+    build: ./services/order-service
+    ports:
+      - "4003:4000"
+    environment:
+      - DATABASE_URL=mongodb://mongodb:27017/service_marketplace
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: service_marketplace
